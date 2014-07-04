@@ -133,3 +133,99 @@ var myModule = (function($, _, global){
 console.log(this.foo);// a globally available variable, exported from the module
 console.log(window.foo);// a globally available variable, exported from the module
 console.log(foo);// a globally available variable, exported from the module
+
+// new myFunction == a new object instance
+// every function can be used as a constructor function
+
+MyObject = function(){
+  this.key = "value";
+  this.doSomething = function(){
+    console.log("I'm doing something");
+  }
+}
+
+var myObject = new MyObject();
+console.log(myObject.key); // value
+myObject.doSomething(); // I'm doing something
+
+// functionality the same - organized into a module
+// private shared variable between object instances
+MyObject = (function(){
+  var privateVar = "I'm doing something privately";
+
+  var myObj = function(){
+    this.key = "value";
+    this.doSomething = function(){
+      console.log(privateVar);
+    }
+  };
+
+  return myObj;
+})();
+
+var myObject = new MyObject();
+var myObject2 = new MyObject();
+
+console.log(myObject.key); // value
+myObject.doSomething(); // I'm doing something
+myObject2.doSomething(); // I'm doing something
+
+// this function is immediatly invoked, so can only run once
+// this means privateVar is only declared once
+// everytime we create a new instance it still carry the closure around
+// privateVar
+// each instance shares the same copy of privateVar
+MyObject = (function(){
+  var privateVar2 = 0;
+
+  var myObj = function(){
+    this.key = "value";
+    this.doSomething = function(){
+      privateVar += 1;
+      return privateVar;
+    }
+  };
+
+  return myObj;
+})();
+
+var myObject = new MyObject();
+var myObject2 = new MyObject();
+
+console.log(myObject.key); // value
+
+console.log(myObject.doSomething()); // 1
+console.log(myObject.doSomething()); // 2
+console.log(myObject.doSomething()); // 3
+
+console.log(myObject2.doSomething()); // 4
+console.log(myObject2.doSomething()); // 5
+console.log(myObject2.doSomething()); // 6
+
+// each instance defines it's own locally scoped variable for privateVar
+MyObject = (function(){
+
+  var myObj = function(){
+    var privateVar2 = 0;
+    this.key = "value";
+    this.doSomething = function(){
+      privateVar += 1;
+      return privateVar;
+    }
+  };
+
+  return myObj;
+})();
+
+var myObject = new MyObject();
+var myObject2 = new MyObject();
+
+console.log(myObject.key); // value
+
+console.log(myObject.doSomething()); // 1
+console.log(myObject.doSomething()); // 2
+console.log(myObject.doSomething()); // 3
+
+console.log(myObject2.doSomething()); // 1
+console.log(myObject2.doSomething()); // 2
+console.log(myObject2.doSomething()); // 3
