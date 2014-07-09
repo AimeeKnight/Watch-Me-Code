@@ -8,10 +8,10 @@ Person.prototype.speak = function(msg){
   console.log(this.name + " says " + msg);
 }
 
-aimee = new Person(aimee);
+aimee = new Person('aimee');
 aimee.speak = function(msg){
   // call parent function's speak message manually
-  Person.prototyp.speak.call(this, msg);
+  Person.prototype.speak.call(this, msg);
 }
 
 aimee.speak("Hello there!"); // Hello there!
@@ -19,7 +19,7 @@ aimee.speak("Hello there!"); // Hello there!
 // calling super object of function from current code
 // * when prototype is an object *
 basePerson = {
-  speak = function(msg){
+  speak: function(msg){
     console.log(this.name + " says " + msg);
   }
 }
@@ -56,7 +56,7 @@ ClassyObjects.copyTo = function(target, source){
   }
 }
 
-ClassObjects.inherits = function(inherited, definition){
+ClassyObjects.inherits = function(inherited, definition){
   var inheritedInstance = Object.create(inherited);
   ClassyObjects.copyTo(inheritedInstance, definition);
   var ClassConstructor = function(){};
@@ -70,7 +70,7 @@ MyClass = ClassyObjects.inherits(myPrototype, {
   foo: "bar",
   baz: function(){
     console.log(this.foo);
-  };
+  }
 });
 
 myObject = new MyClass();
@@ -95,12 +95,13 @@ ClassyObjects.copyTo = function(target, source){
   }
 }
 
-ClassObjects.inherits = function(inherited, definition){
+ClassyObjects.inherits = function(inherited, definition){
   // create subclass
   // the inherited instance becomes the prototype for the new class
   var inheritedInstance = Object.create(inherited);
   // copy the parent's properties to the subclass
   ClassyObjects.copyTo(inheritedInstance, definition);
+  // create the constructor function for the new class
   var ClassConstructor = function(){
     this.super = inherited;
   };
@@ -115,13 +116,14 @@ ClassyObjects.extend = function(definition){
     prototype = this.prototype
   }
   var Constructor = ClassyObjects.inherits(prototype, definition);
-  Constuctor.extend = this.extend;
+  Constructor.extend = this.extend;
   return Constructor;
 }
 
+// attach the extend function to an empty object literal
 ClassyObjects.define = function(definition){
-  var classObj = {};
-  classyObj.extend = ClassyObjexts.extend;
+  var classyObj = {};
+  classyObj.extend = ClassyObjects.extend;
   return classyObj.extend(definition);
 }
 
@@ -133,17 +135,18 @@ MyClass = myPrototype.extend({
   foo: "bar",
   baz: function(){
     console.log(this.foo);
-  };
+  }
 });
 
 ///// 2 - with ClassObjects.define definition
-MyClass = ClassObjects.define({
+MyClass = ClassyObjects.define({
   foo: "bar",
   baz: function(){
     console.log(this.foo);
-  };
+  }
 });
 
+///// 1 or 2 results
 myObject = new MyClass();
 myObject.baz(); // bar
 
@@ -153,10 +156,16 @@ MySubClass = MyClass.extend({
   },
   baz: function(){
     console.log("sub-class baz");
+  },
+  superbaz: function(){
+    this.super.baz();
   }
 });
 
 mySubObj = new MySubClass();
 mySubObj.myFunc(); // a sub-class function
 mySubObj.baz(); // bar (without setting this.super)
-mySubObj.baz(); // sub-class baz (after setting this.super)
+
+///// After setting this.super
+mySubObj.baz(); // sub-class baz
+mySubObj.superbaz(); // bar
