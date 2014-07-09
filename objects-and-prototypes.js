@@ -96,34 +96,38 @@ ClassyObjects.copyTo = function(target, source){
 }
 
 ClassObjects.inherits = function(inherited, definition){
+  // create subclass
+  // the inherited instance becomes the prototype for the new class
   var inheritedInstance = Object.create(inherited);
+  // copy the parent's properties to the subclass
   ClassyObjects.copyTo(inheritedInstance, definition);
   var ClassConstructor = function(){
     this.super = inherited;
   };
   ClassConstructor.prototype = inheritedInstance;
+  // returns ClassConstructor with prototype set to the subclass created above
   return ClassConstructor;
 }
 
 ClassyObjects.extend = function(definition){
-  var prototype = this;
-  if (typeof prototype === "function"){
+  var prototype = this; // set the prototype if we're inheriting from a plain object
+  if (typeof prototype === "function"){ // set the prototype if we're inheriting from a constructor function
     prototype = this.prototype
   }
-  var Constructor = ClassyObject.inherits(prototype, definition);
+  var Constructor = ClassyObjects.inherits(prototype, definition);
   Constuctor.extend = this.extend;
   return Constructor;
 }
 
 ClassyObjects.define = function(definition){
   var classObj = {};
-  classyObj.extend = ClassyObj.extend;
+  classyObj.extend = ClassyObjexts.extend;
   return classyObj.extend(definition);
 }
 
 ///// 1
 myPrototype = {};
-myPrototype.extend = ClassObjects.extend;
+myPrototype.extend = ClassyObjects.extend; // must define 'extend' by setting it equal to framework's extend
 
 MyClass = myPrototype.extend({
   foo: "bar",
