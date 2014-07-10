@@ -11,12 +11,12 @@ function sayFoo(){
   if (false){
     var foo = "hoiseted variable";
   }
-  console.log(foo); // undefined - declared but unasigned variable
+  console.log(foo); // undefined - declared but unassigned variable
 }
 
 function sayFoo(){
   if (true){
-    //var foo = "hoiseted variable";
+    //var foo = "hoisted variable";
   }
   console.log(foo); // referenceError - variable doesn't exist
 }
@@ -41,7 +41,7 @@ outerScope();
 console.log(foo); // referenceError - variable doesn't exist
 
 // immediately executing function - basis for module
-// no asignment of function to a name or variable
+// no assignment of function to a name or variable
 // it can't be called by name because it's already immediately executed
 (function(){
   var foo;
