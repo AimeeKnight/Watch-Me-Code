@@ -99,10 +99,11 @@ ClassyObjects.inherits = function(inherited, definition){
   // create subclass
   // the inherited instance becomes the prototype for the new class
   var inheritedInstance = Object.create(inherited);
-  // copy the parent's properties to the subclass
+  // copy the new instance properties to the object passed in
   ClassyObjects.copyTo(inheritedInstance, definition);
   // create the constructor function for the new class
   var ClassConstructor = function(){
+    // set this.super to the parent object
     this.super = inherited;
   };
   ClassConstructor.prototype = inheritedInstance;
