@@ -24,7 +24,7 @@ foo(); // baz
 quux(); // baz
 
 // context 2
-// scope 1= context
+// scope 1 = context
 function foo(){
   var bar = "baz";
   this.quux = function(){
@@ -98,7 +98,7 @@ foo = {
   }
 }
 
-function baz (){
+function baz(){
 }
 
 foo.bar.call(); // DOMWindow
