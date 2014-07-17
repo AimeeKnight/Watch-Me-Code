@@ -65,7 +65,7 @@ function add(a, b){
   return a + b;
 }
 
-function add(a, b){
+function subtract(a, b){
   return a - b;
 }
 
@@ -76,7 +76,7 @@ var mymath = {
 
 module.exports = mymath;
 
-// module.exports = mymath; // WON'T WORK! - Doesn't export info correctly
+// exports = mymath; // WON'T WORK! - Doesn't export info correctly
 
 ////////////////////////////////////////////////////
 var mymath = require("./mymath");

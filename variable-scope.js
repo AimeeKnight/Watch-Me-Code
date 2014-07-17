@@ -176,7 +176,7 @@ myObject2.doSomething(); // I'm doing something
 // privateVar
 // each instance shares the same copy of privateVar
 MyObject = (function(){
-  var privateVar2 = 0;
+  var privateVar = 0;
 
   var myObj = function(){
     this.key = "value";

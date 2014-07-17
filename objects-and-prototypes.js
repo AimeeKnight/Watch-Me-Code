@@ -170,3 +170,21 @@ mySubObj.baz(); // bar (without setting this.super)
 ///// After setting this.super
 mySubObj.baz(); // sub-class baz
 mySubObj.superbaz(); // bar
+
+////////// Object.create pattern
+function Shape(){
+  this.x = 0;
+  this.y = 0;
+}
+
+Shape.protoype.move = function(x, y){
+  this.x += x;
+  this.y += y;
+}
+
+function Rectangle(){
+  Shape.call(this);
+}
+
+Rectangle.prototype = Object.create(Shape.prototype);
+Rectangle.prototype.constructor = Rectangle;
